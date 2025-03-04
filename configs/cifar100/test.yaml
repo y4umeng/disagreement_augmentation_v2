@@ -1,0 +1,11 @@
+EXPERIMENT:
+  NAME: "TESTING 1 2 3"
+  TAG: "kd,resnet32x4,resnet8x4"
+  PROJECT: "disagreement_augmentation"
+  DA: True
+DISTILLER:
+  TYPE: "DA"
+  TEACHER: "resnet32x4"
+  STUDENT: "resnet8x4"
+LOG:
+  WANDB: False
