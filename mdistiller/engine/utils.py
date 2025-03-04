@@ -30,7 +30,7 @@ def validate(val_loader, distiller):
     batch_time, losses, top1, top5 = [AverageMeter() for _ in range(4)]
     criterion = nn.CrossEntropyLoss()
     num_iter = len(val_loader)
-    pbar = tqdm(range(num_iter))
+    # pbar = tqdm(range(num_iter))
 
     distiller.eval()
     with torch.no_grad():
@@ -53,9 +53,10 @@ def validate(val_loader, distiller):
             msg = "Top-1:{top1.avg:.3f}| Top-5:{top5.avg:.3f}".format(
                 top1=top1, top5=top5
             )
-            pbar.set_description(log_msg(msg, "EVAL"))
-            pbar.update()
-    pbar.close()
+    #         pbar.set_description(log_msg(msg, "EVAL"))
+    #         pbar.update()
+    # pbar.close()
+    print(msg)
     return top1.avg, top5.avg, losses.avg
 
 
@@ -100,4 +101,4 @@ def save_checkpoint(obj, path):
 
 def load_checkpoint(path):
     with open(path, "rb") as f:
-        return torch.load(f, map_location="cpu")
+        return torch.load(f, map_location="cpu", weights_only=False)

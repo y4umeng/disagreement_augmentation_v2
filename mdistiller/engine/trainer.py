@@ -99,16 +99,16 @@ class BaseTrainer(object):
             "top5": AverageMeter(),
         }
         num_iter = len(self.train_loader)
-        pbar = tqdm(range(num_iter))
+        # pbar = tqdm(range(num_iter))
 
         # train loops
         self.distiller.train()
         for idx, data in enumerate(self.train_loader):
             msg = self.train_iter(data, epoch, train_meters)
-            pbar.set_description(log_msg(msg, "TRAIN"))
-            pbar.update()
-        pbar.close()
-
+        #     pbar.set_description(log_msg(msg, "TRAIN"))
+        #     pbar.update()
+        # pbar.close()
+        print(msg)
         # validate
         test_acc, test_acc_top5, test_loss = validate(self.val_loader, self.distiller)
 
@@ -120,6 +120,7 @@ class BaseTrainer(object):
                 "test_acc": test_acc,
                 "test_acc_top5": test_acc_top5,
                 "test_loss": test_loss,
+                "best_acc": self.best_acc,
             }
         )
         self.log(lr, epoch, log_dict)

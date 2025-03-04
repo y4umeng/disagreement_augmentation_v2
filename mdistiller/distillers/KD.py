@@ -21,6 +21,7 @@ class KD(Distiller):
         self.temperature = cfg.KD.TEMPERATURE
         self.ce_loss_weight = cfg.KD.LOSS.CE_WEIGHT
         self.kd_loss_weight = cfg.KD.LOSS.KD_WEIGHT
+        self.cfg = cfg
 
     def forward_train(self, image, target, **kwargs):
         logits_student, _ = self.student(image)
