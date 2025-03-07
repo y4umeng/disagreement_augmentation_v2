@@ -27,6 +27,7 @@ def create_unique_log_path(prefix, experiment_name, resume):
 
     # Check if the path exists and append a number if necessary
     while os.path.exists(log_path):
+        raise ValueError("We already ran this experiment.")
         log_path = f"{base_path}_{counter}"
         counter += 1
 
