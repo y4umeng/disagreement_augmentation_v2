@@ -1,5 +1,5 @@
 EXPERIMENT:
-  NAME: "wrn_40_2_wrn_40_1_da"
+  NAME: "wrn_40_2_wrn_40_1_da_old"
   TAG: "kd,wrn_40_2,wrn_40_1"
   PROJECT: "da_final"
   DA: True
