@@ -89,7 +89,7 @@ def main(cfg, resume, opts):
 
     # train
     trainer = trainer_dict[cfg.SOLVER.TRAINER](
-        experiment_name, distiller, train_loader, val_loader, cfg
+        experiment_name, distiller, train_loader, val_loader, cfg, resume
     )
     trainer.train(resume=resume)
 
