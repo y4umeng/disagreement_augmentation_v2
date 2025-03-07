@@ -14,6 +14,7 @@ from .ReviewKD import ReviewKD
 from .DKD import DKD
 from .DA import DA
 from .DA_OLD import DA_OLD
+from .DA_MSE import DA_MSE
 
 distiller_dict = {
     "NONE": Vanilla,
@@ -31,5 +32,6 @@ distiller_dict = {
     "REVIEWKD": ReviewKD,
     "DKD": DKD,
     "DA": DA,
-    "DA_OLD": DA_OLD
+    "DA_OLD": DA_OLD,
+    "DA_MSE": DA_MSE
 }

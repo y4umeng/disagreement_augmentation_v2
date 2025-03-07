@@ -1,0 +1,9 @@
+EXPERIMENT:
+  NAME: "resnet32x4_ShuffleV2_da_old_mse"
+  TAG: "kd,resnet32x4,ShuffleV2"
+  PROJECT: "da_final"
+  DA: True
+DISTILLER:
+  TYPE: "DA_MSE"
+  TEACHER: "resnet32x4"
+  STUDENT: "ShuffleV2"
