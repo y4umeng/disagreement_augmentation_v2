@@ -1,0 +1,12 @@
+EXPERIMENT:
+  NAME: "resnet32x4_resnet8x4_baseline_10%"
+  TAG: "kd,resnet32x4,resnet8x4, 10%"
+  PROJECT: "cifar_small_data"
+LOG:
+  WANDB: True
+DISTILLER:
+  TYPE: "KD"
+  TEACHER: "resnet32x4"
+  STUDENT: "resnet8x4"
+DATASET:
+  SUBSET: 0.1

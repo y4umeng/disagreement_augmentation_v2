@@ -3,6 +3,7 @@ import numpy as np
 from torch.utils.data import DataLoader
 from torchvision import datasets, transforms
 from PIL import Image
+import torch
 
 
 def get_data_folder():
@@ -136,7 +137,7 @@ def get_cifar100_test_transform():
     )
 
 
-def get_cifar100_dataloaders(batch_size, val_batch_size, num_workers):
+def get_cifar100_dataloaders(batch_size, val_batch_size, num_workers, subset=None):
     data_folder = get_data_folder()
     train_transform = get_cifar100_train_transform()
     test_transform = get_cifar100_test_transform()
@@ -144,6 +145,21 @@ def get_cifar100_dataloaders(batch_size, val_batch_size, num_workers):
         root=data_folder, download=True, train=True, transform=train_transform
     )
     num_data = len(train_set)
+
+    if subset is not None:
+        if isinstance(subset, float) and 0 < subset < 1:
+            subset_size = int(subset * num_data)
+        elif isinstance(subset, int) and 0 < subset <= num_data:
+            subset_size = subset
+        else:
+            raise ValueError("`subset` must be a float (0 < subset < 1) or int (0 < subset <= dataset size).")
+
+        torch.manual_seed(42)  # For reproducibility
+        indices = torch.randperm(num_data)[:subset_size]
+        train_set = torch.utils.data.Subset(train_set, indices)
+        num_data = subset_size
+        print(f"USING DATASET SUBSET OF SIZE {num_data}")
+
     test_set = datasets.CIFAR100(
         root=data_folder, download=True, train=False, transform=test_transform
     )

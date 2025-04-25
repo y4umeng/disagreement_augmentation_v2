@@ -18,6 +18,7 @@ def get_dataset(cfg):
                 batch_size=cfg.SOLVER.BATCH_SIZE,
                 val_batch_size=cfg.DATASET.TEST.BATCH_SIZE,
                 num_workers=cfg.DATASET.NUM_WORKERS,
+                subset=cfg.DATASET.SUBSET
             )
         num_classes = 100
     elif cfg.DATASET.TYPE == "imagenet":

@@ -26,7 +26,7 @@ class AverageMeter(object):
         self.avg = self.sum / self.count
 
 
-def validate(val_loader, distiller):
+def validate(val_loader, distiller, print_vals=True):
     batch_time, losses, top1, top5 = [AverageMeter() for _ in range(4)]
     criterion = nn.CrossEntropyLoss()
     num_iter = len(val_loader)
@@ -56,7 +56,7 @@ def validate(val_loader, distiller):
     #         pbar.set_description(log_msg(msg, "EVAL"))
     #         pbar.update()
     # pbar.close()
-    print(msg)
+    if print_vals: print(msg)
     return top1.avg, top5.avg, losses.avg
 
 

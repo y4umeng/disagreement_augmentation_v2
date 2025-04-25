@@ -1,0 +1,13 @@
+EXPERIMENT:
+  NAME: "resnet32x4_resnet8x4_da_10%"
+  TAG: "da,resnet32x4,resnet8x4, 10%"
+  PROJECT: "cifar_small_data"
+  DA: True
+LOG:
+  WANDB: True
+DISTILLER:
+  TYPE: "DA_MSE"
+  TEACHER: "resnet32x4"
+  STUDENT: "resnet8x4"
+DATASET:
+  SUBSET: 0.1
