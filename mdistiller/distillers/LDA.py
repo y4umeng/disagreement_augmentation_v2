@@ -3,7 +3,9 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torchvision.transforms as transforms
 from ._base import Distiller
-from .KD import KD
+from .KD import KD, kd_loss
+import os
+
 from mdistiller.taesd import TAESD
 
 class LDA(KD):
@@ -23,7 +25,6 @@ class LDA(KD):
                 'LR': 0.01
             })
         
-        import os
         taesd_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "taesd")
         encoder_path = os.path.join(taesd_dir, "taesd_encoder.pth")
         decoder_path = os.path.join(taesd_dir, "taesd_decoder.pth")
@@ -46,7 +47,7 @@ class LDA(KD):
             with torch.no_grad():
                 denormalized_image = self.denormalize(image)
                 # Resize to fit encoder input size
-                resized_image = F.interpolate(denormalized_image, size=(64, 64), mode='bilinear', align_corners=False)
+                resized_image = F.interpolate(denormalized_image, size=(128, 128), mode='bilinear', align_corners=False)
                 latent = self.ae.encoder(resized_image)
             
             # Create a fresh tensor with gradients
@@ -72,13 +73,13 @@ class LDA(KD):
                 resized_image = F.interpolate(normalized_image, size=(32, 32), mode='bilinear', align_corners=False)
                 
                 # Get model predictions
-                with torch.no_grad():
-                    logits_student, _ = self.student(resized_image)
-                    logits_teacher, _ = self.teacher(resized_image)
+                
+                logits_student, _ = self.student(resized_image)
+                logits_teacher, _ = self.teacher(resized_image)
                 
                 # Calculate loss on detached logits (focusing gradient on latent only)
-                normalized_student = F.normalize(logits_student.detach(), p=1, dim=1)
-                normalized_teacher = F.normalize(logits_teacher.detach(), p=1, dim=1)
+                normalized_student = F.normalize(logits_student, p=1, dim=1)
+                normalized_teacher = F.normalize(logits_teacher, p=1, dim=1)
                 
                 # Maximize disagreement
                 disagreement_loss = -1.0 * F.mse_loss(normalized_student, normalized_teacher)
@@ -88,7 +89,7 @@ class LDA(KD):
                 dummy_loss = torch.sum(resized_image * 0.0)
                 
                 # Total loss combines the disagreement with the dummy connection
-                total_loss = disagreement_loss + dummy_loss
+                total_loss = disagreement_loss # + dummy_loss
                 
                 # Backward pass and optimization step
                 total_loss.backward()
@@ -119,7 +120,7 @@ class LDA(KD):
     def forward_train(self, image, target, **kwargs):
         """Forward with optional disagreement augmentation"""
         # Randomly apply DA
-        if hasattr(self.cfg, 'DA') and torch.rand(1)[0] < self.cfg.DA.PROB:
+        if torch.rand(1)[0] < self.cfg.DA.PROB:
             try:
                 image = self.DA(image)
             except Exception as e:
@@ -133,7 +134,7 @@ class LDA(KD):
 
         # Compute losses
         loss_ce = self.ce_loss_weight * F.cross_entropy(logits_student, target)
-        loss_kd = self.kd_loss_weight * self.kd_loss_fn(logits_student, logits_teacher)
+        loss_kd = self.kd_loss_weight * kd_loss(logits_student, logits_teacher, self.temperature)
         
         # Check for NaN values
         if torch.isnan(loss_ce):
@@ -148,11 +149,3 @@ class LDA(KD):
             "loss_kd": loss_kd,
         }
         return logits_student, losses_dict
-        
-    def kd_loss_fn(self, logits_student, logits_teacher):
-        """Knowledge distillation loss"""
-        log_pred_student = F.log_softmax(logits_student / self.temperature, dim=1)
-        pred_teacher = F.softmax(logits_teacher / self.temperature, dim=1)
-        loss = F.kl_div(log_pred_student, pred_teacher, reduction="none").sum(1).mean()
-        loss *= self.temperature**2
-        return loss

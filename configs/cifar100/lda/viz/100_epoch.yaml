@@ -1,0 +1,20 @@
+EXPERIMENT:
+  NAME: "resnet32x4_resnet8x4_LDA_1"
+  TAG: "lda,resnet32x4,resnet8x4, 0.1"
+  PROJECT: "latent_da"
+  DA: True
+LOG:
+  WANDB: True
+DISTILLER:
+  TYPE: "LDA"
+  TEACHER: "resnet32x4"
+  STUDENT: "resnet8x4"
+# KD:
+#   TEMPERATURE: 4
+#   LOSS:
+#     CE_WEIGHT: 1.0
+#     KD_WEIGHT: 1.0
+DA:
+  PROB: 0.5
+  LR: 0.1
+  EPOCHS: 100
