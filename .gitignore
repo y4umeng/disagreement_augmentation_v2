@@ -7,7 +7,6 @@ detection/datasets
 detection/output
 detection/output*/
 ckpts/
-*.pth
 *.t7
 tmp*.py
 
