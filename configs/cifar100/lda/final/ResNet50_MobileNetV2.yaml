@@ -1,0 +1,13 @@
+EXPERIMENT:
+  NAME: "ResNet50_MobileNetV2_da"
+  TAG: "kd,ResNet50,MobileNetV2"
+  PROJECT: "latent_da_final"
+  DA: True
+DISTILLER:
+  TYPE: "LDA"
+  TEACHER: "ResNet50"
+  STUDENT: "MobileNetV2"
+DA:
+  PROB: 0.25
+  LR: 0.1
+  EPOCHS: 1

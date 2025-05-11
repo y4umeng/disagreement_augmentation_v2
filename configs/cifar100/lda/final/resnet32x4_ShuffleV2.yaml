@@ -1,0 +1,13 @@
+EXPERIMENT:
+  NAME: "resnet32x4_ShuffleV2_da"
+  TAG: "kd,resnet32x4,ShuffleV2"
+  PROJECT: "latent_da_final"
+  DA: True
+DISTILLER:
+  TYPE: "LDA"
+  TEACHER: "resnet32x4"
+  STUDENT: "ShuffleV2"
+DA:
+  PROB: 0.25
+  LR: 0.1
+  EPOCHS: 1

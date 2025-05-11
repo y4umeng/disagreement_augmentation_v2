@@ -1,0 +1,13 @@
+EXPERIMENT:
+  NAME: "resnet110_resnet32_da"
+  TAG: "kd,resnet110,resnet32"
+  PROJECT: "latent_da_final"
+  DA: True
+DISTILLER:
+  TYPE: "LDA"
+  TEACHER: "resnet110"
+  STUDENT: "resnet32"
+DA:
+  PROB: 0.25
+  LR: 0.1
+  EPOCHS: 1

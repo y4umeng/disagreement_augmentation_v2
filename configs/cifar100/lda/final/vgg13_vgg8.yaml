@@ -1,0 +1,13 @@
+EXPERIMENT:
+  NAME: "vgg13_vgg8_da"
+  TAG: "kd,vgg13,vgg8"
+  PROJECT: "latent_da_final"
+  DA: True
+DISTILLER:
+  TYPE: "LDA"
+  TEACHER: "vgg13"
+  STUDENT: "vgg8"
+DA:
+  PROB: 0.25
+  LR: 0.1
+  EPOCHS: 1
