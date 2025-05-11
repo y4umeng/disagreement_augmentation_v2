@@ -1,9 +1,13 @@
 EXPERIMENT:
   NAME: "resnet32x4_resnet8x4_da"
   TAG: "kd,resnet32x4,resnet8x4"
-  PROJECT: "da_final"
+  PROJECT: "latent_da_final"
   DA: True
 DISTILLER:
   TYPE: "LDA"
   TEACHER: "resnet32x4"
   STUDENT: "resnet8x4"
+DA:
+  PROB: 0.25
+  LR: 0.1
+  EPOCHS: 1
